@@ -1,2 +1,5 @@
 # 323-SyntaxAnalyzer-A2
-RDP DEEZ >.&lt; 
+
+---
+
+## Adam, Douglas, Steven's super kawaii syntax analyzer
