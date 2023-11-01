@@ -64,87 +64,131 @@ def syntax_error():
 
 #production rules
 def Rat23F():
-    Opt_Function_Definitions()
-    if is_token('#'):
-        print(lexer('#'))
-    else: 
-        syntax_error()
-        return False
-    Opt_Declaration_List()
-    Statement_List()
-    if is_token('#'):
-        print(lexer('#'))
-    else:
-        syntax_error()
-        return False
-    return True
+    print('<Rat23F> --> <Opt Function Definitions> # <Opt Declaration List> <Statement List> #')
+    if Opt_Function_Definitions():
+        if is_token('#'):
+            print(lexer('#'))
+            if Opt_Declaration_List():
+                if Statement_List():
+                    if is_token('#'):
+                        print(lexer('#'))
+                        return True
+    return False
 
 def Opt_Function_Definitions():
     if Function_Definitions():
+        print('<Opt Function Definitions> --> <Function Definitions>')
         return True
-    else:
-        Empty()
+    elif Empty():
+        print('<Opt Function Definitions> --> <Empty>')
         return True
-
-# def Function_Definitions():
-#     Function()
-    
-
-def Function():
-    if is_token('function'):
-        print(lexer('function'))
-        Identifier()
-        if is_token('('):
-            print(lexer('('))
-            Opt_Parameter_List()
-            if is_token(')'):
-                print(lexer(')'))
-                Opt_Declaration_List()
-                Body()
-                return True
     else:
         return False
 
-# idk how to do this one                
-# def Opt_Parameter_List():
-#     if Parameter_List():
-#         return True
-#     elif 
-
-def Parameter():
-    IDs()
-    Qualifier()
+def Function_Definitions():
+    if Function():
+        if Function_Definitions():
+            print('<Function Definitions> --> <Function> <Function Definitions>')
+            return True
+        else:
+            print('<Function Definitions> --> <Function>')
+            return True
+    else:
+        return False
     
+
+def Function():
+    print('<Function> --> function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>')
+    if is_token('function'):
+        if Identifier():
+            if is_token('('):
+                if Opt_Parameter_List():
+                    if is_token(')'):
+                        if Opt_Declaration_List():
+                            if Body(): 
+                                return True
+    else:
+        return False
+            
+def Opt_Parameter_List():
+    if Parameter_List():
+        print('<Opt Parameter List> --> <Parameter List>')
+        return True
+    elif Empty():
+        print('<Opt Parameter List> --> <Empty>')
+        return True
+    else:
+        return False
+
+def Parameter_List():
+    if Parameter():
+        if is_token(','):
+            print('<Parameter List> --> <Parameter> , <Parameter List>')
+            if Parameter_List():
+                return True
+        else:
+            print('<Parameter List> --> <Parameter>')
+            return True
+    else:
+        return False
+    
+def Parameter():
+    print('<Parameter> --> <IDs > <Qualifier>')
+    if IDs():
+        if Qualifier():
+            return True
+    else:
+        return False    
+
+   
 def Qualifier():
     if is_token('integer'):
+        print('<Qualifier> --> integer')
+        print(lexer('integer'))
         return True
     elif is_token('bool'):
+        print('<Qualifier> --> bool')
+        print(lexer('bool'))
         return True
     elif is_token('real'):
+        print('<Qualifier> --> real')
+        print(lexer('real'))
         return True
     else:
         return False
     
 def Body():
+    print('<Body> --> { <Statement List> }')
     if is_token('{'):
         print(lexer('{'))
-        Statement_List()
-        if is_token('}'):
-            print(lexer('}'))
-            return True
+        if Statement_List():
+            if is_token('}'):
+                print(lexer('}'))
+                return True
     return False
 
 def Opt_Declaration_List():
     if Declaration_List():
-        Declaration_List()
+        print('<Opt Declaration List> --> <Declaration List>')
         return True
     elif Empty():
-        Empty()
+        print('<Opt Declaration List> --> <Empty>')
         return True
+    else: 
+        return False
+    
+def Declaration_List():
+    if Declaration():
+        if is_token(';')
+            print(lexer(';'))
+            if Declaration_List():
+                print('<Declaration List> --> <Declaration> ; <Declaration List>')
+                return True
+            else:
+                print('<Declaration List> --> <Declaration> ;')
+                return True
     else:
         return False
-
-
     
         
 # list will hold tokens, lexemes as entries
@@ -152,4 +196,4 @@ tokens = []
 token_index = 0
 filename = 'testCases/testCase1.txt'
 getTokens(filename, tokens)
-print(is_token('integer'))
+print(lexer('integer'))
