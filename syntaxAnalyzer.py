@@ -179,7 +179,7 @@ def Opt_Declaration_List():
     
 def Declaration_List():
     if Declaration():
-        if is_token(';')
+        if is_token(';'):
             print(lexer(';'))
             if Declaration_List():
                 print('<Declaration List> --> <Declaration> ; <Declaration List>')
@@ -190,10 +190,28 @@ def Declaration_List():
     else:
         return False
     
+def Declaration():
+    print('<Declaration> --> <Qualifier > <IDs>')
+    if Qualifier():
+        if IDs():
+            return True
+    else:
+        return False
+    
+def IDs():
+    if Identifier():
+        if is_token(','):
+            print('<IDs> ::= <Identifier> | <Identifier>, <IDs>')
+            print(lexer(','))
+            if IDs:
+                return True
+    else:
+        return False
+                
         
 # list will hold tokens, lexemes as entries
 tokens = []
 token_index = 0
 filename = 'testCases/testCase1.txt'
 getTokens(filename, tokens)
-print(lexer('integer'))
+print(lexer('#'))
