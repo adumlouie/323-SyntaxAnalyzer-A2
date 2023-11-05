@@ -297,33 +297,39 @@ def If():
 
 def Return():
     if is_token('ret'):
-        print(lexer('ret'))
         if is_token(';'):
-           print('<return> --> ret;')
+           print('<Return> --> ret ;')
+           print(lexer('ret'))
            print(lexer(';'))
            return True
         else:
             if Expression():
                 if is_token(';'):
+                    print('<Return> --> ret <expression>')
+                    print(lexer('ret'))
                     print(lexer(';'))
-                    print('<return> --> ret <expression>')
                     return True
     else:
         return False
                            
                                             
 def Print():
+    print('<Print> --> put ( <Expression> );')
     if is_token('put'):
+        print(lexer('put'))
         if is_token('('):
+            print(lexer('('))
             if Expression():
                 if is_token(')'):
-                    print(lexer(';'))
-                    return True
+                    print(lexer(')'))
+                    if is_token(';'):
+                        print(lexer(';'))
+                        return True
     else:
         return False
 
 def Scan():
-    print('<scan> --> get (<IDs>)')
+    print('<Scan> --> get (<IDs>)')
     if is_token('get'):
         print(lexer('get'))
         if is_token('('):
@@ -335,39 +341,49 @@ def Scan():
     return False
     
 def While():
-    print('<while> --> while ( <Condition> ) <Statement>')
+    print('<While> --> while ( <Condition> ) <Statement>')
+    if is_token('while'):
+        print(lexer('while'))
+        if is_token('('):
+            print(lexer('('))
+            if Condition():
+                if is_token(')'):
+                    print(lexer(')'))
+                    if Statement():
+                        return True
+    return False
 
 def Condition():
     if Expression():
         if Relop():
             if Expression():
-                print('<condition> --> <expression><relop><expression>')
+                print('<Condition> --> <Expression> <Relop> <Expression>')
                 return True
     return False
+
 def Relop():
-    print('<Relop> ::= == | != | > | < | <= | =>')
     if is_token('=='):
-        print('<relop> --> ==')
+        print('<Relop> --> ==')
         print(lexer('=='))
         return True
     elif is_token('!='):
-        print('<relop> --> !=')
+        print('<Relop> --> !=')
         print(lexer('!='))
         return True
     elif is_token('>'):
-        print('<relop> --> >')
+        print('<Relop> --> >')
         print(lexer('>'))
         return True
     elif is_token('<'):
-        print('<relop> --> <')
+        print('<Relop> --> <')
         print(lexer('<'))
         return True
     elif is_token('<='):
-        print('<relop> --> <=')
+        print('<Relop> --> <=')
         print(lexer('<='))
         return True
     elif is_token('=>'):
-        print('<relop> --> =>')
+        print('<Relop> --> =>')
         print(lexer('=>'))
         return True
     else:
@@ -375,58 +391,96 @@ def Relop():
     
 def Expression():
     if Term():
-        if Expression_n():
-            print('<expression> --> <term> <expression>')
+        if Expression_Prime():
+            print('<Expression> --> <Term> <Expression>')
             return True
     return False
 
+def Expression_Prime():
+    if is_token('+'):
+        if Term():
+            if Expression_Prime():
+                print("<Expression'> --> + <Term> <Expression'>")
+                print(lexer('+'))
+                return True
+                
+    elif is_token('-'):
+        if Term():
+            if Expression_Prime():
+                print("<Expression'> --> - <Term> <Expression'>")
+                print(lexer('-'))
+                return True
+    elif Empty():
+        return True
+    else:
+        return False
+    
 def Term():
-    print('<Factor> <Term')
+    print("<Term> --> <Factor> <Term'>")
     if Factor():
-        if Term_n():
+        if Term_Prime():
             print('<Factor> <Term')
             return True
     return False
 
+def Term_Prime():
+    if is_token('*'):
+        if Factor():
+            if Term_Prime():
+                print("<Term'> ::= * <Factor> <Term'>")
+                print(lexer('*'))
+    elif is_token('/'):
+        if Factor():
+            if Term_Prime():
+                print("<Term'> ::= / <Factor> <Term'>")
+                print(lexer('/'))
+    elif Empty():
+        return True
+    else:
+        return False
+    
 def Factor():
     if is_token('-'):
-        print(lexer('-'))
         if Primary():
             print('<Factor> --> - <Primary>')
+            print(lexer('-'))
             return True
-        else:
-            print('<Factor> --> Primary')
+    elif Primary():
+        print('<Factor> --> <Primary>')
     else:
         return False
     
 def Primary():
-    print('<Primary> ::= <Identifier> | <Integer> | <Identifier> ( <IDs> ) | ( <Expression> ) |<Real> | true | false')
     if Identifier():
-        print('<primary> --> <identifier>')
+        print('<Primary> --> <Identifier>')
         return True
     elif Integer():
-        print('<primary> --> <integer>')
+        print('<Primary> --> <Integer>')
         return True
     elif Identifier():
         if is_token('('):
-            print(lexer('()'))
             if IDs():
                 if is_token(')'):
+                    print('<Primary> --> <Identifier> (<IDs>)')
+                    print(lexer('('))
                     print(lexer(')'))
                     return True
     elif is_token('('):
-        print(lexer('('))
         if Expression():
             if is_token(')'):
+                print('<Primary> --> (<Expression>)')
+                print(lexer('('))
                 print(lexer(')'))
                 return True
     elif Real():
-        print('<primary> --> <real>')
+        print('<Primary> --> <Real>')
         return True
     elif is_token('true'):
+        print('<Primary> --> true')
         print(lexer('true'))
         return True
     elif is_token('false'):
+        print('<Primary> --> true')
         print(lexer('false'))
         return True
     else:
