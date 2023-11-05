@@ -297,14 +297,20 @@ def If():
 
 def Return():
     if is_token('ret'):
-       if is_token(';'):
-           if is_token('ret'):
+        print(lexer('ret'))
+        if is_token(';'):
+           print('<return> --> ret;')
+           print(lexer(';'))
+           return True
+        else:
             if Expression():
                 if is_token(';'):
                     print(lexer(';'))
+                    print('<return> --> ret <expression>')
                     return True
     else:
         return False
+                           
                                             
 def Print():
     if is_token('put'):
