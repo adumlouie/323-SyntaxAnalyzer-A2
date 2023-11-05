@@ -57,10 +57,11 @@ def is_token(expected):
 def syntax_error():
     global token_index
     currentToken = tokens[token_index]
-    print(f"Syntax Error at token: {currentToken}")
-    token_index += 1
-    
+    if tokens[token_index](1) != is_token:
+        print(f"syntax Error at token: ")
+        token_index += 1
     return False
+
 
 #production rules
 def Rat23F():
@@ -368,7 +369,7 @@ def Relop():
     
 def Expression():
     if Term():
-        if Expression_n()
+        if Expression_n():
             print('<expression> --> <term> <expression>')
             return True
     return False
@@ -425,6 +426,13 @@ def Primary():
     else:
         return False
 
+
+#Empty function if there is nothing inside 
+def Empty():
+    global token_index
+    if tokens == 0:
+        print(f"Empty tokens!")
+        return True
     
 # list will hold tokens, lexemes as entries
 tokens = []
