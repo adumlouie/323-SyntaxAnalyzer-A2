@@ -367,7 +367,64 @@ def Relop():
         return False
     
 def Expression():
-    print('<expression> --> <term><expression>')
+    if Term():
+        if Expression_n()
+            print('<expression> --> <term> <expression>')
+            return True
+    return False
+
+def Term():
+    print('<Factor> <Term')
+    if Factor():
+        if Term_n():
+            print('<Factor> <Term')
+            return True
+    return False
+
+def Factor():
+    if is_token('-'):
+        print(lexer('-'))
+        if Primary():
+            print('<Factor> --> - <Primary>')
+            return True
+        else:
+            print('<Factor> --> Primary')
+    else:
+        return False
+    
+def Primary():
+    print('<Primary> ::= <Identifier> | <Integer> | <Identifier> ( <IDs> ) | ( <Expression> ) |<Real> | true | false')
+    if Identifier():
+        print('<primary> --> <identifier>')
+        return True
+    elif Integer():
+        print('<primary> --> <integer>')
+        return True
+    elif Identifier():
+        if is_token('('):
+            print(lexer('()'))
+            if IDs():
+                if is_token(')'):
+                    print(lexer(')'))
+                    return True
+    elif is_token('('):
+        print(lexer('('))
+        if Expression():
+            if is_token(')'):
+                print(lexer(')'))
+                return True
+    elif Real():
+        print('<primary> --> <real>')
+        return True
+    elif is_token('true'):
+        print(lexer('true'))
+        return True
+    elif is_token('false'):
+        print(lexer('false'))
+        return True
+    else:
+        return False
+
     
 # list will hold tokens, lexemes as entries
 tokens = []
