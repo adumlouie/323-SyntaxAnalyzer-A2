@@ -296,7 +296,78 @@ def If():
 
 def Return():
     if is_token('ret'):
-       if is_token()                                           
+       if is_token(';'):
+           if is_token('ret'):
+            if Expression():
+                if is_token(';'):
+                    print(lexer(';'))
+                    return True
+    else:
+        return False
+                                            
+def Print():
+    if is_token('put'):
+        if is_token('('):
+            if Expression():
+                if is_token(')'):
+                    print(lexer(';'))
+                    return True
+    else:
+        return False
+
+def Scan():
+    print('<scan> --> get (<IDs>)')
+    if is_token('get'):
+        print(lexer('get'))
+        if is_token('('):
+            print(lexer('('))
+            if IDs():
+                if is_token(')'):
+                    print(lexer(')'))
+                    return True
+    return False
+    
+def While():
+    print('<while> --> while ( <Condition> ) <Statement>')
+
+def Condition():
+    if Expression():
+        if Relop():
+            if Expression():
+                print('<condition> --> <expression><relop><expression>')
+                return True
+    return False
+def Relop():
+    print('<Relop> ::= == | != | > | < | <= | =>')
+    if is_token('=='):
+        print('<relop> --> ==')
+        print(lexer('=='))
+        return True
+    elif is_token('!='):
+        print('<relop> --> !=')
+        print(lexer('!='))
+        return True
+    elif is_token('>'):
+        print('<relop> --> >')
+        print(lexer('>'))
+        return True
+    elif is_token('<'):
+        print('<relop> --> <')
+        print(lexer('<'))
+        return True
+    elif is_token('<='):
+        print('<relop> --> <=')
+        print(lexer('<='))
+        return True
+    elif is_token('=>'):
+        print('<relop> --> =>')
+        print(lexer('=>'))
+        return True
+    else:
+        return False
+    
+def Expression():
+    print('<expression> --> <term><expression>')
     
 # list will hold tokens, lexemes as entries
 tokens = []
