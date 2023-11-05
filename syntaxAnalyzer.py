@@ -102,8 +102,10 @@ def Function():
     if is_token('function'):
         if Identifier():
             if is_token('('):
+                print(lexer('('))
                 if Opt_Parameter_List():
                     if is_token(')'):
+                        print(lexer(')'))
                         if Opt_Declaration_List():
                             if Body(): 
                                 return True
@@ -124,6 +126,7 @@ def Parameter_List():
     if Parameter():
         if is_token(','):
             print('<Parameter List> --> <Parameter> , <Parameter List>')
+            print(lexer(','))
             if Parameter_List():
                 return True
         else:
@@ -180,12 +183,13 @@ def Opt_Declaration_List():
 def Declaration_List():
     if Declaration():
         if is_token(';'):
-            print(lexer(';'))
             if Declaration_List():
                 print('<Declaration List> --> <Declaration> ; <Declaration List>')
+                print(lexer(';'))
                 return True
             else:
                 print('<Declaration List> --> <Declaration> ;')
+                print(lexer(';'))
                 return True
     else:
         return False
@@ -203,12 +207,97 @@ def IDs():
         if is_token(','):
             print('<IDs> ::= <Identifier> | <Identifier>, <IDs>')
             print(lexer(','))
-            if IDs:
+            if IDs():
                 return True
     else:
         return False
-                
-        
+
+def Statement_List():
+    if Statement():
+        if Statement_List():
+             print('<Statement List> --> <Statement> <Statement List>')
+             return True
+        else:
+            print('<Statement List> --> <Statement>')
+            return True
+    else:
+        return False
+    
+def Statement():
+    if Compound():
+        print('<Statement> --> <Compound>')
+        return True
+    elif Assign():
+        print('<Statement> --> <Assign>')
+        return True
+    elif If():
+        print('<Statement> --> <If>')
+        return True
+    elif Return():
+        print('<Statement> --> <Return>')
+        return True
+    elif Print():
+        print('<Statement> --> <Print>')
+        return True
+    elif Scan():
+        print('<Statement> --> <Scan>')
+        return True
+    elif While():
+        print('<Statement> --> <While>')
+        return True
+    else:
+        return False
+
+def Compound():
+    print('<Compound> --> { <Statement List> }')
+    if is_token('{'):
+        print(lexer('{'))
+        if Statement_List():
+            if is_token('}'):
+                print(lexer('}'))
+                return True
+    else:
+        return False
+
+def Assign():
+    print('<Assign> --> <Identifier> = <Expression> ;')
+    if Identifier():
+        if is_token('='):
+            print(lexer('='))
+            if Expression():
+                if is_token(';'):
+                    print(lexer(';'))
+                    return True
+    else:
+        return False
+
+def If():
+    if is_token('if'):
+        if is_token('('):
+            if Condition():
+                if is_token(')'):
+                    if Statement():
+                        if is_token('endif'):
+                            print('<If> --> if ( <Condition> ) <Statement> endif')
+                            print(lexer('if'))
+                            print(lexer('('))
+                            print(lexer(')'))
+                            print(lexer('endif'))
+                            return True
+                        elif is_token('else'):
+                            if Statement():
+                                if is_token('endif'):
+                                    print('<If> --> if ( <Condition> ) <Statement> else <Statement> endif')
+                                    print(lexer('if'))
+                                    print(lexer('('))
+                                    print(lexer(')'))
+                                    print(lexer('else'))
+                                    print(lexer('endif'))
+
+def Return():
+    if is_token('ret'):
+       if is_token()                                           
+    
 # list will hold tokens, lexemes as entries
 tokens = []
 token_index = 0
