@@ -57,10 +57,11 @@ def is_token(expected):
 # error handling needs more work
 def syntax_error():
     global token_index
-    currentToken = tokens[token_index]
-    if tokens[token_index](1) != is_token:
-        print(f"syntax Error at token: ")
-        token_index += 1
+    global token_list
+    currentToken = tokens_list[token_index][0]
+    currentLexeme = tokens_list[token_index][1]
+    print(f'Current Token: {currentToken}')
+    print(f'Current Lexeme: {currentLexeme}')
     return False
 
 
@@ -527,11 +528,10 @@ def Integer():
         return False
 # the main program
 tokens_list = []
-token_index = 0
-getTokens('testCases/testCase2.txt', tokens_list)
+token_index = 9
+getTokens('testCases/testCase1.txt', tokens_list)
 # print(tokens_list)
-
 if Rat23F():
     print('Parsing Complete')
 else:
-    print('Syntax Error: ')
+    syntax_error()
