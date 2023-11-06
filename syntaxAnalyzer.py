@@ -47,8 +47,9 @@ def getTokens(filename, tokensList):
 # compares lexeme with expected and progresses token index
 def is_token(expected):
     global token_index
+    global tokens_list
     # compares current lexeme with expected 
-    if tokens[token_index][1] == expected:
+    if tokens_list[token_index][1] == expected:
         token_index += 1
         return True
     return False
@@ -68,10 +69,10 @@ def Rat23F():
     print('<Rat23F> --> <Opt Function Definitions> # <Opt Declaration List> <Statement List> #')
     if Opt_Function_Definitions():
         if is_token('#'):
-            print(lexer('#'))
             if Opt_Declaration_List():
                 if Statement_List():
                     if is_token('#'):
+                        print(lexer('#'))
                         print(lexer('#'))
                         return True
     return False
@@ -99,16 +100,16 @@ def Function_Definitions():
     
 
 def Function():
-    print('<Function> --> function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>')
     if is_token('function'):
         if Identifier():
             if is_token('('):
-                print(lexer('('))
                 if Opt_Parameter_List():
                     if is_token(')'):
-                        print(lexer(')'))
                         if Opt_Declaration_List():
-                            if Body(): 
+                            if Body():
+                                print('<Function> --> function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>')
+                                print(lexer('('))
+                                print(lexer(')'))
                                 return True
     else:
         return False
@@ -137,9 +138,9 @@ def Parameter_List():
         return False
     
 def Parameter():
-    print('<Parameter> --> <IDs > <Qualifier>')
     if IDs():
         if Qualifier():
+            print('<Parameter> --> <IDs > <Qualifier>')
             return True
     else:
         return False    
@@ -162,11 +163,11 @@ def Qualifier():
         return False
     
 def Body():
-    print('<Body> --> { <Statement List> }')
     if is_token('{'):
-        print(lexer('{'))
         if Statement_List():
             if is_token('}'):
+                print('<Body> --> { <Statement List> }')
+                print(lexer('{'))
                 print(lexer('}'))
                 return True
     return False
@@ -196,9 +197,9 @@ def Declaration_List():
         return False
     
 def Declaration():
-    print('<Declaration> --> <Qualifier > <IDs>')
     if Qualifier():
         if IDs():
+            print('<Declaration> --> <Qualifier > <IDs>')
             return True
     else:
         return False
@@ -206,12 +207,16 @@ def Declaration():
 def IDs():
     if Identifier():
         if is_token(','):
-            print('<IDs> ::= <Identifier> | <Identifier>, <IDs>')
-            print(lexer(','))
             if IDs():
+                print('<IDs> --> <Identifier>, <IDs>')
+                print(lexer(','))
                 return True
+        else:
+            print('<IDs> --> <Identifier>')
+            return True
     else:
         return False
+        
 
 def Statement_List():
     if Statement():
@@ -250,23 +255,23 @@ def Statement():
         return False
 
 def Compound():
-    print('<Compound> --> { <Statement List> }')
     if is_token('{'):
-        print(lexer('{'))
         if Statement_List():
             if is_token('}'):
+                print('<Compound> --> { <Statement List> }')
+                print(lexer('{'))
                 print(lexer('}'))
                 return True
     else:
         return False
 
 def Assign():
-    print('<Assign> --> <Identifier> = <Expression> ;')
     if Identifier():
         if is_token('='):
-            print(lexer('='))
             if Expression():
                 if is_token(';'):
+                    print('<Assign> --> <Identifier> = <Expression> ;')
+                    print(lexer('='))
                     print(lexer(';'))
                     return True
     else:
@@ -314,42 +319,42 @@ def Return():
                            
                                             
 def Print():
-    print('<Print> --> put ( <Expression> );')
     if is_token('put'):
-        print(lexer('put'))
         if is_token('('):
-            print(lexer('('))
             if Expression():
                 if is_token(')'):
-                    print(lexer(')'))
                     if is_token(';'):
+                        print('<Print> --> put ( <Expression> );')
+                        print(lexer('put'))
+                        print(lexer('('))
+                        print(lexer(')'))
                         print(lexer(';'))
                         return True
     else:
         return False
 
 def Scan():
-    print('<Scan> --> get (<IDs>)')
     if is_token('get'):
-        print(lexer('get'))
         if is_token('('):
-            print(lexer('('))
             if IDs():
                 if is_token(')'):
+                    print('<Scan> --> get (<IDs>)')
+                    print(lexer('get'))
+                    print(lexer('('))
                     print(lexer(')'))
                     return True
     return False
     
 def While():
-    print('<While> --> while ( <Condition> ) <Statement>')
     if is_token('while'):
-        print(lexer('while'))
         if is_token('('):
-            print(lexer('('))
             if Condition():
                 if is_token(')'):
-                    print(lexer(')'))
                     if Statement():
+                        print('<While> --> while ( <Condition> ) <Statement>')
+                        print(lexer('while'))
+                        print(lexer('('))
+                        print(lexer(')'))
                         return True
     return False
 
@@ -416,9 +421,9 @@ def Expression_Prime():
         return False
     
 def Term():
-    print("<Term> --> <Factor> <Term'>")
     if Factor():
         if Term_Prime():
+            print("<Term> --> <Factor> <Term'>")
             print('<Factor> <Term')
             return True
     return False
@@ -427,12 +432,12 @@ def Term_Prime():
     if is_token('*'):
         if Factor():
             if Term_Prime():
-                print("<Term'> ::= * <Factor> <Term'>")
+                print("<Term'> --> * <Factor> <Term'>")
                 print(lexer('*'))
     elif is_token('/'):
         if Factor():
             if Term_Prime():
-                print("<Term'> ::= / <Factor> <Term'>")
+                print("<Term'> --> / <Factor> <Term'>")
                 print(lexer('/'))
     elif Empty():
         return True
@@ -486,17 +491,47 @@ def Primary():
     else:
         return False
 
-
-#Empty function if there is nothing inside 
 def Empty():
+    print('<Empty> --> epsilon')
+    return True
+
+def Identifier():
     global token_index
-    if tokens == 0:
-        print(f"Empty tokens!")
+    global tokens_list
+    if isID(tokens_list[token_index][1]):
+        print(lexer(tokens_list[token_index][1]))
+        token_index += 1
         return True
+    else:
+        return False
+
+def Real():
+    global token_index
+    global tokens_list
+    if isReal(tokens_list[token_index][1]):
+        print(lexer(tokens_list[token_index][1]))
+        token_index += 1
+        return True
+    else:
+        return False
     
-# list will hold tokens, lexemes as entries
-tokens = []
+    
+def Integer():
+    global token_index
+    global tokens_list
+    if isInt(tokens_list[token_index][1]):
+        print(lexer(tokens_list[token_index][1]))
+        token_index += 1
+        return True
+    else:
+        return False
+# the main program
+tokens_list = []
 token_index = 0
-filename = 'testCases/testCase1.txt'
-getTokens(filename, tokens)
-print(lexer('#'))
+getTokens('testCases/testCase2.txt', tokens_list)
+# print(tokens_list)
+
+if Rat23F():
+    print('Parsing Complete')
+else:
+    print('Syntax Error: ')
