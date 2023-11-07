@@ -1,4 +1,3 @@
-
 function square (num integer)
 {
     ret num * num;
@@ -19,4 +18,4 @@ if (isLarge > 1)
 else
     put(0); 
 endif
-#
+#      
