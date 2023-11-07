@@ -2,7 +2,8 @@
 KEYWORDS = {'integer', 'function', 'bool', 'real', 'if', 'endif', 
             'else', 'ret', 'put', 'get', 'while', 'true', 'false'}
 SEPARATORS = {'(', ')', '{', '}', ',', ';', '#'}
-OPERATORS = {'=', '==', '!=', '>', '<', '<=', '>=', '+', '-', '*', '/'}
+OPERATORS = {'=', '==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/'}
+MULT_OPS = {'<=', '=>'}
 DELIMITERS = {' ', '\n', '(', ')', '{', '}', ',', ';', '#'}
 
 # DFA representation for identifiers returns true if is an identifier

@@ -1,11 +1,15 @@
-function max(x integer, y integer)
+[* this is comment for this sample code which
+converts Fahrenheit into Celcius *]
+function convert1x (fahr integer)
 {
-    if (x > y) ret x; else ret y; endif
+ret 5 * (fahr -32) / 9;
 }
-
-# 
-integer num1, num2, maximum;
-get(num1, num2);
-maximum = max(num1, num2);
-put(maximum);
-#  
+#
+integer low, high, step; [* declarations *]
+get (low, high, step);
+while (low <= high )
+{ put (low);
+put (convert1x (low));
+low = low + step;
+}
+#

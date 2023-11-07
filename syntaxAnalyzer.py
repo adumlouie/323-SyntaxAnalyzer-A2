@@ -62,6 +62,7 @@ def syntax_error():
     currentLexeme = tokens_list[token_index][1]
     print(f'Current Token: {currentToken}')
     print(f'Current Lexeme: {currentLexeme}')
+    print(f'Current Index: {token_index}')
     return False
 
 
